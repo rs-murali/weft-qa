@@ -40,13 +40,21 @@ weft-qa/
 │   │   ├── agents/
 │   │   │   ├── __init__.py
 │   │   │   ├── test_gen/
-│   │   │   │   ├── graph.py
-│   │   │   │   ├── nodes.py
-│   │   │   │   └── state.py
+│   │   │   │   ├── utils/
+│   │   │   │   │   ├── __init__.py
+│   │   │   │   │   ├── tools.py
+│   │   │   │   │   ├── nodes.py
+│   │   │   │   │   └── state.py
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── agent.py
 │   │   │   └── coverage_sync/
-│   │   │       ├── graph.py
-│   │   │       ├── nodes.py
-│   │   │       └── state.py
+│   │   │       ├── utils/
+│   │   │       │   ├── __init__.py
+│   │   │       │   ├── tools.py
+│   │   │       │   ├── nodes.py
+│   │   │       │   └── state.py
+│   │   │       ├── __init__.py
+│   │   │       └── agent.py
 │   │   │
 │   │   ├── rag/
 │   │   │   ├── __init__.py
@@ -70,6 +78,7 @@ weft-qa/
 │   │   └── integration/
 │   ├── pyproject.toml
 │   ├── uv.lock
+│   ├── langgraph.json
 │   ├── .env
 │   └── Dockerfile
 │
@@ -99,8 +108,15 @@ weft-qa/
 | `routers/chat.py` | `/chat/stream` — invokes LangGraph agent |
 | `routers/requirements.py` | PRD upload and re-sync trigger |
 | `routers/coverage.py` | Coverage matrix CRUD |
-| `agents/test_gen/` | LangGraph graph: requirements → test cases |
-| `agents/coverage_sync/` | LangGraph graph: PRD diff → coverage re-sync |
+| `agents/test_gen/agent.py` | LangGraph graph construction: requirements → test cases |
+| `agents/test_gen/utils/nodes.py` | Node functions for the test-gen graph |
+| `agents/test_gen/utils/state.py` | State definition for the test-gen graph |
+| `agents/test_gen/utils/tools.py` | Tools available to the test-gen agent |
+| `agents/coverage_sync/agent.py` | LangGraph graph construction: PRD diff → coverage re-sync |
+| `agents/coverage_sync/utils/nodes.py` | Node functions for the coverage-sync graph |
+| `agents/coverage_sync/utils/state.py` | State definition for the coverage-sync graph |
+| `agents/coverage_sync/utils/tools.py` | Tools available to the coverage-sync agent |
+| `langgraph.json` | LangGraph server config — declares graphs and entry points |
 | `rag/` | Shared ingestion, retriever, and vector store client |
 | `models/` | Pydantic request/response schemas |
 | `services/` | Pure business logic, no FastAPI dependencies |
