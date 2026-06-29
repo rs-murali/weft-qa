@@ -1,4 +1,4 @@
-from langchain_core.messages import SystemMessage
+# from langchain_core.messages import SystemMessage
 
 
 class Nodes:
@@ -7,6 +7,9 @@ class Nodes:
         self.system_prompt = system_prompt
 
     async def generate(self, state):
-        messages = [SystemMessage(content=self.system_prompt)] + state["messages"]
-        response = await self.llm.ainvoke(messages)
+        """
+        Temporarily bypassing the system prompt.
+        To be implemented in the next step
+        """
+        response = await self.llm.ainvoke(state["messages"])
         return {"messages": [response]}

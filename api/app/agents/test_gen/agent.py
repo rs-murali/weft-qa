@@ -1,5 +1,4 @@
 from langgraph.graph import StateGraph, START, END
-from langchain_core.messages import HumanMessage
 from .utils.state import TestGenState
 from .utils.nodes import Nodes
 
@@ -15,12 +14,10 @@ class TestGenAgent:
         graph.add_edge("generate", END)
         return graph.compile()
 
-    async def astream(self, message: str):
-        async for event in self._graph.astream_events(
-            {"messages": [HumanMessage(content=message)]},
-            version="v2",
+    async def astream(self, messages: list):
+        async for msg, _ in self._graph.astream(
+            {"messages": messages},
+            stream_mode="messages",
         ):
-            if event["event"] == "on_chat_model_stream":
-                chunk = event["data"]["chunk"]
-                if chunk.content:
-                    yield chunk.content
+            if msg.content:
+                yield msg.content
