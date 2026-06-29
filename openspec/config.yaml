@@ -1,0 +1,41 @@
+schema: spec-driven
+
+context: |
+  Project: weft-qa — an AI-powered QA assistant that generates and syncs test cases.
+  Domain: QA automation; agents include test_gen (generates tests from specs) and coverage_sync (aligns coverage with codebase).
+
+  Backend (api/):
+    Language: Python 3.12+
+    Framework: FastAPI + Uvicorn
+    Agent orchestration: LangGraph (stateful multi-node agents)
+    LLM provider: LangChain OpenRouter (via langchain-openrouter)
+    Validation: Pydantic v2 + pydantic-settings
+    DI: dependency-injector container (api/app/core/container.py)
+    Prompts: loaded via api/app/core/prompt_loader.py
+    Structure: api/app/{agents,routers,models,services,core,rag}
+
+  Frontend (web/):
+    Framework: Next.js 16 + React 19, TypeScript 6
+    Chat UI: @assistant-ui/react
+    Styling: Tailwind CSS 4 + Radix UI primitives
+    State: Zustand
+    Linting/formatting: oxlint + oxfmt (not ESLint/Prettier)
+
+  Conventions:
+    Conventional commits with scope (e.g. feat(api): ..., fix(web): ...)
+    No Co-Authored-By trailers in commits
+    Streaming responses over SSE from FastAPI to the frontend
+
+rules:
+  proposal:
+    - Include a "Non-goals" section
+    - Note which agent (test_gen or coverage_sync) is affected
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Reference existing LangGraph node patterns before inventing new ones
+  design:
+    - Include sequence diagrams for agent node flows
+    - Document LLM prompt templates that will be added or changed
+  tasks:
+    - Break tasks into chunks of max 2 hours
+    - Separate backend (api/) and frontend (web/) tasks clearly
