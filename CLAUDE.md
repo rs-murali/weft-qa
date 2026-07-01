@@ -103,3 +103,6 @@ UI components in `web/components/ui/` are Radix UI primitives; `web/lib/utils.ts
 **Commit messages:**
 - Conventional commits with scope, e.g. `feat(api): ...`, `fix(web): ...`
 - No Co-Authored-By trailers
+
+**Frontend UI:**
+- Use shadcn/ui components exclusively for all UI elements. Do not introduce other component libraries.
