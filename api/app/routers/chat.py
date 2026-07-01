@@ -5,6 +5,7 @@ from dependency_injector.wiring import Provide, inject
 from langchain_core.messages import HumanMessage, AIMessage
 from app.models.chat import ChatRequest
 from app.core.container import Container
+from app.core.security import get_current_user
 from app.agents.test_gen.agent import TestGenAgent
 
 router = APIRouter(prefix="/chat", tags=["chat"])
@@ -26,6 +27,7 @@ def _to_langchain_messages(messages):
 async def chat_stream(
     request: ChatRequest,
     agent: Annotated[TestGenAgent, Depends(Provide[Container.test_gen_agent])],
+    _current_user: Annotated[str, Depends(get_current_user)],
 ):
     messages = _to_langchain_messages(request.messages)
 
