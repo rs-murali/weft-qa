@@ -1,5 +1,8 @@
-## MODIFIED Requirements
+# chat Specification
 
+## Purpose
+TBD - created by archiving change add-user-auth. Update Purpose after archive.
+## Requirements
 ### Requirement: Chat stream requires authentication
 The `/chat/stream` endpoint SHALL require a valid JWT `Authorization: Bearer <token>` header on every request. Requests without a token or with an invalid/expired token SHALL be rejected before any LLM call is made.
 
@@ -18,3 +21,4 @@ The `/chat/stream` endpoint SHALL require a valid JWT `Authorization: Bearer <to
 #### Scenario: Expired token
 - **WHEN** a client sends `POST /chat/stream` with an expired JWT
 - **THEN** the system returns HTTP 401 with `{ "detail": "Token expired" }` and makes no LLM call
+
