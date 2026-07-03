@@ -1,32 +1,25 @@
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import MagicMock
 import pytest
+from dependency_injector import providers
 from fastapi.testclient import TestClient
 from pymongo.errors import DuplicateKeyError
 from app.core.security import hash_password
-from app.core.mongodb import get_db
 
 
 def _make_client(mock_db):
-    """Return a TestClient whose lifespan is skipped and get_db is overridden."""
-    import app.core.mongodb as mongodb_module
-    from main import app
+    """Return a TestClient with the container's mongo_db provider overridden."""
+    from main import app, container
 
-    # Skip the real lifespan (no real MongoDB needed)
-    mongodb_module._client = MagicMock()  # satisfy get_client()
-
-    async def override_get_db():
-        return mock_db
-
-    app.dependency_overrides[get_db] = override_get_db
+    container.mongo_db.override(providers.Object(mock_db))
     client = TestClient(app, raise_server_exceptions=False)
     return client
 
 
 @pytest.fixture(autouse=True)
 def _clear_overrides():
-    from main import app
+    from main import container
     yield
-    app.dependency_overrides.clear()
+    container.mongo_db.reset_override()
 
 
 def _mock_db():
@@ -42,7 +35,7 @@ def _mock_db():
 
 def test_register_success():
     mock_db, col = _mock_db()
-    col.insert_one = AsyncMock(return_value=MagicMock(inserted_id="abc"))
+    col.insert_one = MagicMock(return_value=MagicMock(inserted_id="abc"))
     c = _make_client(mock_db)
 
     res = c.post("/auth/register", json={"email": "a@example.com", "password": "pass"})
@@ -52,7 +45,7 @@ def test_register_success():
 
 def test_register_duplicate_email():
     mock_db, col = _mock_db()
-    col.insert_one = AsyncMock(side_effect=DuplicateKeyError("dup"))
+    col.insert_one = MagicMock(side_effect=DuplicateKeyError("dup"))
     c = _make_client(mock_db)
 
     res = c.post("/auth/register", json={"email": "a@example.com", "password": "pass"})
@@ -75,7 +68,7 @@ def test_register_invalid_email():
 def test_login_success():
     mock_db, col = _mock_db()
     hashed = hash_password("mypassword")
-    col.find_one = AsyncMock(
+    col.find_one = MagicMock(
         return_value={"email": "a@example.com", "hashed_password": hashed}
     )
     c = _make_client(mock_db)
@@ -90,7 +83,7 @@ def test_login_success():
 def test_login_wrong_password():
     mock_db, col = _mock_db()
     hashed = hash_password("correct")
-    col.find_one = AsyncMock(
+    col.find_one = MagicMock(
         return_value={"email": "a@example.com", "hashed_password": hashed}
     )
     c = _make_client(mock_db)
@@ -102,7 +95,7 @@ def test_login_wrong_password():
 
 def test_login_unknown_email():
     mock_db, col = _mock_db()
-    col.find_one = AsyncMock(return_value=None)
+    col.find_one = MagicMock(return_value=None)
     c = _make_client(mock_db)
 
     res = c.post("/auth/login", json={"email": "ghost@example.com", "password": "any"})

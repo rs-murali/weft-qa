@@ -2,21 +2,21 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.container import Container
-from app.core.mongodb import connect, disconnect
 from app.routers.chat import router as chat_router
 from app.routers.auth import router as auth_router
+
+container = Container()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await connect()
+    container.init_resources()
     yield
-    await disconnect()
+    container.shutdown_resources()
 
 
 def create_app() -> FastAPI:
-    container = Container()
-    container.wire(modules=["app.routers.chat"])
+    container.wire(modules=["app.routers.chat", "app.routers.auth"])
 
     app = FastAPI(title="Weft QA API", lifespan=lifespan)
     app.add_middleware(
