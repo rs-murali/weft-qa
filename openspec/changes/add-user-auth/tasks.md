@@ -28,7 +28,7 @@
 ## 6. Backend — Protect Chat Endpoint
 
 - [x] 6.1 Add `Depends(get_current_user)` to `POST /chat/stream` in `api/app/routers/chat.py`
-- [ ] 6.2 Manually test that an unauthenticated request to `/chat/stream` returns 401  ← manual
+- [x] 6.2 Manually test that an unauthenticated request to `/chat/stream` returns 401  ← manual
 
 ## 7. Frontend — Auth Utilities
 
@@ -44,7 +44,7 @@
 ## 9. Frontend — Route Protection
 
 - [x] 9.1 Create `web/middleware.ts` that checks for a JWT in cookies or `localStorage` (via a readable cookie approach) and redirects unauthenticated users from `/` to `/login`
-- [ ] 9.2 Verify redirect works: navigating to `/` without a token sends to `/login`; after login, redirects back to `/`  ← manual
+- [x] 9.2 Verify redirect works: navigating to `/` without a token sends to `/login`; after login, redirects back to `/`  ← manual
 
 ## 10. Frontend — Logout
 
@@ -56,4 +56,4 @@
 - [x] 11.1 Write `api/tests/unit/test_security.py`: test `hash_password`/`verify_password`, `create_access_token`/`decode_access_token`, and expired token rejection
 - [x] 11.2 Write `api/tests/unit/test_auth_router.py`: mock MongoDB, test register (success, duplicate email, invalid input) and login (success, wrong password, unknown email) endpoints
 - [x] 11.3 Run `uv run pytest` and confirm all tests pass
-- [ ] 11.4 Manual end-to-end: register a user, log in via `/login` page, confirm chat streams, click logout, confirm redirect to `/login`, confirm `/chat/stream` returns 401 without token  ← manual
+- [x] 11.4 Manual end-to-end: register a user, log in via `/login` page, confirm chat streams, click logout, confirm redirect to `/login`, confirm `/chat/stream` returns 401 without token  ← manual
