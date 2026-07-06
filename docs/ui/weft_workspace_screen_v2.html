@@ -1,0 +1,95 @@
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">TestSync workspace screen for Checkout flow revamp with breadcrumb navigation, stats row, chat panel with recent chats, uploaded PRDs panel, requirements coverage table, and a needs attention section flagging test cases that need review or are orphaned</h2>
+
+<div onclick="sendPrompt('Go back to the workspaces list')" style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--color-text-secondary);font-size:13px;margin-bottom:14px;">
+  <i class="ti ti-chevron-left" style="font-size:14px;" aria-hidden="true"></i>
+  <span>Workspaces</span>
+  <span style="color:var(--color-text-tertiary);">/</span>
+  <span style="color:var(--color-text-primary);">Checkout flow revamp</span>
+</div>
+
+<div style="margin-bottom:16px;">
+  <p style="font-size:18px;font-weight:500;margin:0;">Checkout flow revamp</p>
+  <p style="font-size:13px;color:var(--color-text-secondary);margin:4px 0 0;">Requirements, test coverage, and PRD changes for the checkout redesign</p>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;">
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem 1rem;">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 4px;">Coverage</p>
+    <p style="font-size:20px;font-weight:500;margin:0;">78%</p>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem 1rem;">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 4px;">Requirements</p>
+    <p style="font-size:20px;font-weight:500;margin:0;">12</p>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem 1rem;">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 4px;">Needs review</p>
+    <p style="font-size:20px;font-weight:500;margin:0;color:var(--color-text-warning);">2</p>
+  </div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem 1rem;">
+    <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 4px;">Orphaned</p>
+    <p style="font-size:20px;font-weight:500;margin:0;color:var(--color-text-danger);">1</p>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:16px;align-items:start;">
+
+  <div>
+    <div style="display:flex;gap:8px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:16px;">
+      <input type="text" placeholder="Describe a requirement or ask a question..." style="flex:1;border:none;background:transparent;" />
+      <button aria-label="Send" style="width:36px;padding:0;flex-shrink:0;"><i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    </div>
+
+    <p style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin:0 0 10px;">Recent chats</p>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);">
+        <span style="font-size:13px;">Login requirement + clarifying questions</span>
+        <span style="font-size:12px;color:var(--color-text-tertiary);flex-shrink:0;margin-left:12px;">2h ago</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);">
+        <span style="font-size:13px;">Payment validation edge cases</span>
+        <span style="font-size:12px;color:var(--color-text-tertiary);flex-shrink:0;margin-left:12px;">Yesterday</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);">
+        <span style="font-size:13px;">Cart abandonment coverage gaps</span>
+        <span style="font-size:12px;color:var(--color-text-tertiary);flex-shrink:0;margin-left:12px;">3 days ago</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px;">
+
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <p style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin:0;">PRDs</p>
+        <button aria-label="Upload PRD" style="width:28px;height:28px;padding:0;"><i class="ti ti-upload" style="font-size:13px;" aria-hidden="true"></i></button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div><p style="margin:0;font-size:13px;">checkout-spec.pdf</p><p style="margin:2px 0 0;font-size:12px;color:var(--color-text-tertiary);">v1 · initial</p></div>
+        <div><p style="margin:0;font-size:13px;">checkout-spec.pdf</p><p style="margin:2px 0 0;font-size:12px;color:var(--color-text-info);font-weight:500;">v2 · latest</p></div>
+      </div>
+    </div>
+
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;">
+      <p style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin:0 0 10px;">Requirements</p>
+      <table style="width:100%;font-size:12px;border-collapse:collapse;margin-bottom:14px;">
+        <tr><td style="padding:4px 0;">REQ-001</td><td style="padding:4px 0;text-align:right;"><span style="background:var(--color-background-success);color:var(--color-text-success);padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;">Covered</span></td></tr>
+        <tr><td style="padding:4px 0;">REQ-002</td><td style="padding:4px 0;text-align:right;"><span style="background:var(--color-background-warning);color:var(--color-text-warning);padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;">Partial</span></td></tr>
+        <tr><td style="padding:4px 0;">REQ-003</td><td style="padding:4px 0;text-align:right;"><span style="background:var(--color-background-danger);color:var(--color-text-danger);padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;">Missing</span></td></tr>
+      </table>
+
+      <p style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin:0 0 10px;">Needs attention</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div onclick="sendPrompt('Show me the test cases that need review for REQ-002')" style="cursor:pointer;display:flex;gap:6px;align-items:flex-start;font-size:12px;">
+          <i class="ti ti-refresh" style="font-size:13px;margin-top:1px;color:var(--color-text-warning);" aria-hidden="true"></i>
+          <span>2 test cases need review — REQ-002 changed in v2</span>
+        </div>
+        <div onclick="sendPrompt('Show me the orphaned test case from the removed requirement')" style="cursor:pointer;display:flex;gap:6px;align-items:flex-start;font-size:12px;">
+          <i class="ti ti-unlink" style="font-size:13px;margin-top:1px;color:var(--color-text-danger);" aria-hidden="true"></i>
+          <span>1 test case orphaned — REQ-008 removed in v2</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

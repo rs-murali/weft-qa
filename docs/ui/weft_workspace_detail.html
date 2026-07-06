@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>weft — Checkout flow revamp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="weft_workspace_detail.css" />
+</head>
+<body>
+
+<h1 class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">weft workspace screen for Checkout flow revamp with breadcrumb navigation, chat panel with recent chats, and a right rail for workspace memory, custom instructions, and files, plus a requirements panel with inline review flags and orphaned test cases</h1>
+
+<div class="page">
+
+  <button class="breadcrumb" onclick="sendPrompt('Go back to the workspaces list')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    <span>Workspaces</span>
+    <span class="sep">/</span>
+    <span class="current">Checkout flow revamp</span>
+  </button>
+
+  <div class="workspace-header">
+    <h1>Checkout flow revamp</h1>
+    <p>Requirements, test coverage, and PRD changes for the checkout redesign</p>
+  </div>
+
+  <div class="workspace-layout">
+
+    <div class="main-col">
+
+      <div class="composer">
+        <input type="text" placeholder="Describe a requirement or ask a question..." />
+        <button aria-label="Send" onclick="sendPrompt('Send message')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+        </button>
+      </div>
+
+      <p class="section-label">Recent chats</p>
+      <div class="chat-list">
+        <button class="chat-row" onclick="sendPrompt('Open the Login requirement and clarifying questions chat')">
+          <span>Login requirement + clarifying questions</span>
+          <span class="when">2h ago</span>
+        </button>
+        <button class="chat-row" onclick="sendPrompt('Open the Payment validation edge cases chat')">
+          <span>Payment validation edge cases</span>
+          <span class="when">Yesterday</span>
+        </button>
+        <button class="chat-row" onclick="sendPrompt('Open the Cart abandonment coverage gaps chat')">
+          <span>Cart abandonment coverage gaps</span>
+          <span class="when">3 days ago</span>
+        </button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header-row">
+          <p class="panel-title">Requirements <span class="count-badge">12</span></p>
+        </div>
+        <table class="req-table">
+          <tr>
+            <td>REQ-001</td>
+            <td>
+              <div class="req-status"><span class="pill success">Covered</span></div>
+            </td>
+          </tr>
+          <tr>
+            <td>REQ-002</td>
+            <td>
+              <div class="req-status">
+                <svg class="flag-icon warning" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" role="img"><title>2 test cases need review — REQ-002 changed in v2</title><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                <span class="pill warning">Partial</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>REQ-003</td>
+            <td>
+              <div class="req-status"><span class="pill danger">Missing</span></div>
+            </td>
+          </tr>
+        </table>
+        <button class="orphaned-note" onclick="sendPrompt('Show me the orphaned test case from the removed requirement')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="9" y1="15" x2="15" y2="9"/></svg>
+          <span>1 test case orphaned &mdash; REQ-008 removed in v2</span>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="rail">
+
+      <div class="panel">
+        <div class="panel-header-row">
+          <p class="panel-title">Memory</p>
+          <button class="icon-btn" aria-label="Edit memory" onclick="sendPrompt('Edit workspace memory')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+          </button>
+        </div>
+        <p class="memory-text">Checkout supports 3 payment methods (card, PayPal, Apple Pay) and guest checkout. Refunds must complete within 5 business days. REQ-002 changed in v2 to require CVV re-entry on saved cards.</p>
+        <p class="meta-note">Last updated 2h ago</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header-row">
+          <p class="panel-title">Instructions</p>
+          <button class="icon-btn" aria-label="Add instructions" onclick="sendPrompt('Add custom instructions for this workspace')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          </button>
+        </div>
+        <p class="empty-note">Add instructions to tailor how test cases are generated for this workspace</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header-row">
+          <p class="panel-title">Files <span class="count-badge">2</span></p>
+          <button class="icon-btn" aria-label="Upload file" onclick="sendPrompt('Upload a file to this workspace')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+          </button>
+        </div>
+        <div class="capacity-meter"><div class="capacity-fill" style="width:34%"></div></div>
+        <p class="meta-note">34% of workspace capacity used</p>
+        <div class="file-list">
+          <div class="file-row">
+            <span class="file-name">checkout-spec.pdf</span>
+            <span class="file-tag">v1 &middot; initial</span>
+          </div>
+          <div class="file-row">
+            <span class="file-name">checkout-spec.pdf</span>
+            <span class="file-tag latest">v2 &middot; latest</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg-tile);border:1px solid var(--border);color:var(--text-primary);font-size:13px;padding:10px 16px;border-radius:var(--radius-md);opacity:0;pointer-events:none;transition:opacity .2s ease;"></div>
+<script>
+  function sendPrompt(text) {
+    var toast = document.getElementById('toast');
+    toast.textContent = '→ ' + text;
+    toast.style.opacity = '1';
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(function () {
+      toast.style.opacity = '0';
+    }, 2200);
+  }
+</script>
+</body>
+</html>
