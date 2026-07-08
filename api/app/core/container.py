@@ -1,20 +1,29 @@
 from pathlib import Path
-from pymongo import MongoClient
+
+from beanie import init_beanie
 from dependency_injector import containers, providers
+from pymongo import AsyncMongoClient
+
+from .app_config import app_config
 from .llm import get_llm
 from .prompt_loader import load_prompt
-from .app_config import app_config
 from app.agents.test_gen.utils.nodes import Nodes
 from app.agents.test_gen.agent import TestGenAgent
+from app.models.user import User
+from app.models.workspace import Workspace
+from app.repositories.user_repository import UserRepository
+from app.repositories.workspace_repository import WorkspaceRepository
+from app.services.auth_service import AuthService
+from app.services.workspace_service import WorkspaceService
 
 _AGENTS_DIR = Path(__file__).parent.parent / "agents"
 
 
-def _init_mongo_client(uri: str, db_name: str):
-    client = MongoClient(uri)
-    client[db_name]["users"].create_index("email", unique=True)
+async def _init_mongo_client(uri: str, db_name: str):
+    client = AsyncMongoClient(uri, tz_aware=True)
+    await init_beanie(database=client[db_name], document_models=[User, Workspace])
     yield client
-    client.close()
+    await client.close()
 
 
 class Container(containers.DeclarativeContainer):
@@ -27,9 +36,12 @@ class Container(containers.DeclarativeContainer):
         db_name=app_config.mongodb_db_name,
     )
 
-    mongo_db = providers.Singleton(
-        lambda client: client[app_config.mongodb_db_name],
-        client=mongo_client,
+    user_repository = providers.Singleton(UserRepository)
+    auth_service = providers.Singleton(AuthService, user_repository=user_repository)
+
+    workspace_repository = providers.Singleton(WorkspaceRepository)
+    workspace_service = providers.Singleton(
+        WorkspaceService, workspace_repository=workspace_repository
     )
 
     test_gen_system_prompt = providers.Singleton(

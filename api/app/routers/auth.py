@@ -1,35 +1,34 @@
-from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
-from pymongo.database import Database
-from pymongo.errors import DuplicateKeyError
 from dependency_injector.wiring import inject, Provide
 from app.core.container import Container
-from app.core.security import create_access_token, hash_password, verify_password
 from app.models.user import TokenResponse, UserCreate
+from app.services.auth_service import (
+    AuthService,
+    EmailAlreadyRegisteredError,
+    InvalidCredentialsError,
+)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 @inject
-def register(body: UserCreate, db: Database = Depends(Provide[Container.mongo_db])):
-    doc = {
-        "email": body.email,
-        "hashed_password": hash_password(body.password),
-        "created_at": datetime.now(timezone.utc),
-    }
+async def register(
+    body: UserCreate, auth_service: AuthService = Depends(Provide[Container.auth_service])
+):
     try:
-        db["users"].insert_one(doc)
-    except DuplicateKeyError:
+        await auth_service.register(body)
+    except EmailAlreadyRegisteredError:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
     return {"message": "User created"}
 
 
 @router.post("/login", response_model=TokenResponse)
 @inject
-def login(body: UserCreate, db: Database = Depends(Provide[Container.mongo_db])):
-    user = db["users"].find_one({"email": body.email})
-    if user is None or not verify_password(body.password, user["hashed_password"]):
+async def login(
+    body: UserCreate, auth_service: AuthService = Depends(Provide[Container.auth_service])
+):
+    try:
+        return await auth_service.login(body)
+    except InvalidCredentialsError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    token = create_access_token(subject=user["email"])
-    return TokenResponse(access_token=token)

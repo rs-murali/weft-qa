@@ -48,6 +48,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "argon2-cffi" },
+    { name = "beanie" },
     { name = "dependency-injector" },
     { name = "email-validator" },
     { name = "fastapi" },
@@ -74,6 +75,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "argon2-cffi", specifier = ">=23.0.0" },
+    { name = "beanie", specifier = ">=1.29.0" },
     { name = "dependency-injector", specifier = ">=4.49.1" },
     { name = "email-validator", specifier = ">=2.0.0" },
     { name = "fastapi", specifier = ">=0.138.0" },
@@ -147,6 +149,22 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/9a/8e/82a0fe20a541c03148528be8cac2408564a6c9a0cc7e9171802bc1d26985/attrs-26.1.0.tar.gz", hash = "sha256:d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32", size = 952055, upload-time = "2026-03-19T14:22:25.026Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl", hash = "sha256:c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309", size = 67548, upload-time = "2026-03-19T14:22:23.645Z" },
+]
+
+[[package]]
+name = "beanie"
+version = "2.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "lazy-model" },
+    { name = "pydantic" },
+    { name = "pymongo" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/53/9c/f3037fff9ea059d7b0c72b6c6e4f3dcfeb28bf544fe0fc5420335d7c49d0/beanie-2.1.0.tar.gz", hash = "sha256:44f3c50710aa90daa9c9c40f9bf9c8954968fe16d7e5398c1f2fd462daf94fe1", size = 185979, upload-time = "2026-03-26T01:27:03.63Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/00/b5/1c6c404bcce8fa53d3f422dce6e58bff99c3e3cb2a3c49d519e3e5822125/beanie-2.1.0-py3-none-any.whl", hash = "sha256:077381dad0e0129fd4dc38cdaa3d85cb517da7338e3d893a689314884df4379b", size = 92697, upload-time = "2026-03-26T01:27:02.191Z" },
 ]
 
 [[package]]
@@ -717,6 +735,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/57/8a/445562007432dca8a79dac13a50d3e98da547f2042812254385526dcd207/langsmith-0.9.2.tar.gz", hash = "sha256:b2a43f285a3cc17e46f9eea0ed975709af0c8f40e9f3f250364a8ed728e00e3d", size = 4567843, upload-time = "2026-06-25T13:46:45.823Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d3/c3/68e5e91300467e3e4f649633561cb797f50293128cbfa29530ce0ea3eb03/langsmith-0.9.2-py3-none-any.whl", hash = "sha256:a861167d181514aa2b73f49874e4f9bb13b4ef75e292e22d3940344e9b345e45", size = 595131, upload-time = "2026-06-25T13:46:43.613Z" },
+]
+
+[[package]]
+name = "lazy-model"
+version = "0.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/72/85/e25dc36dee49cf0726c03a1558b5c311a17095bc9361bcbf47226cb3075a/lazy-model-0.4.0.tar.gz", hash = "sha256:a851d85d0b518b0b9c8e626bbee0feb0494c0e0cb5636550637f032dbbf9c55f", size = 8256, upload-time = "2025-08-07T20:05:34.737Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5c/54/653ea0d7c578741e9867ccf0cbf47b7eac09ff22e4238f311ac20671a911/lazy_model-0.4.0-py3-none-any.whl", hash = "sha256:95ea59551c1ac557a2c299f75803c56cc973923ef78c67ea4839a238142f7927", size = 13749, upload-time = "2025-08-07T20:05:36.303Z" },
 ]
 
 [[package]]

@@ -1,16 +1,17 @@
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock
 import pytest
 from dependency_injector import providers
 from fastapi.testclient import TestClient
-from pymongo.errors import DuplicateKeyError
-from app.core.security import hash_password
+
+from app.models.user import TokenResponse
+from app.services.auth_service import EmailAlreadyRegisteredError, InvalidCredentialsError
 
 
-def _make_client(mock_db):
-    """Return a TestClient with the container's mongo_db provider overridden."""
+def _make_client(mock_auth_service):
+    """Return a TestClient with the container's auth_service provider overridden."""
     from main import app, container
 
-    container.mongo_db.override(providers.Object(mock_db))
+    container.auth_service.override(providers.Object(mock_auth_service))
     client = TestClient(app, raise_server_exceptions=False)
     return client
 
@@ -19,14 +20,11 @@ def _make_client(mock_db):
 def _clear_overrides():
     from main import container
     yield
-    container.mongo_db.reset_override()
+    container.auth_service.reset_override()
 
 
-def _mock_db():
-    mock_db = MagicMock()
-    mock_collection = MagicMock()
-    mock_db.__getitem__ = MagicMock(return_value=mock_collection)
-    return mock_db, mock_collection
+def _mock_auth_service():
+    return AsyncMock()
 
 
 # ---------------------------------------------------------------------------
@@ -34,9 +32,9 @@ def _mock_db():
 # ---------------------------------------------------------------------------
 
 def test_register_success():
-    mock_db, col = _mock_db()
-    col.insert_one = MagicMock(return_value=MagicMock(inserted_id="abc"))
-    c = _make_client(mock_db)
+    service = _mock_auth_service()
+    service.register.return_value = None
+    c = _make_client(service)
 
     res = c.post("/auth/register", json={"email": "a@example.com", "password": "pass"})
     assert res.status_code == 201
@@ -44,9 +42,9 @@ def test_register_success():
 
 
 def test_register_duplicate_email():
-    mock_db, col = _mock_db()
-    col.insert_one = MagicMock(side_effect=DuplicateKeyError("dup"))
-    c = _make_client(mock_db)
+    service = _mock_auth_service()
+    service.register.side_effect = EmailAlreadyRegisteredError()
+    c = _make_client(service)
 
     res = c.post("/auth/register", json={"email": "a@example.com", "password": "pass"})
     assert res.status_code == 409
@@ -54,8 +52,8 @@ def test_register_duplicate_email():
 
 
 def test_register_invalid_email():
-    mock_db, _ = _mock_db()
-    c = _make_client(mock_db)
+    service = _mock_auth_service()
+    c = _make_client(service)
 
     res = c.post("/auth/register", json={"email": "not-an-email", "password": "pass"})
     assert res.status_code == 422
@@ -66,27 +64,21 @@ def test_register_invalid_email():
 # ---------------------------------------------------------------------------
 
 def test_login_success():
-    mock_db, col = _mock_db()
-    hashed = hash_password("mypassword")
-    col.find_one = MagicMock(
-        return_value={"email": "a@example.com", "hashed_password": hashed}
-    )
-    c = _make_client(mock_db)
+    service = _mock_auth_service()
+    service.login.return_value = TokenResponse(access_token="fake-token")
+    c = _make_client(service)
 
     res = c.post("/auth/login", json={"email": "a@example.com", "password": "mypassword"})
     assert res.status_code == 200
     body = res.json()
-    assert "access_token" in body
+    assert body["access_token"] == "fake-token"
     assert body["token_type"] == "bearer"
 
 
 def test_login_wrong_password():
-    mock_db, col = _mock_db()
-    hashed = hash_password("correct")
-    col.find_one = MagicMock(
-        return_value={"email": "a@example.com", "hashed_password": hashed}
-    )
-    c = _make_client(mock_db)
+    service = _mock_auth_service()
+    service.login.side_effect = InvalidCredentialsError()
+    c = _make_client(service)
 
     res = c.post("/auth/login", json={"email": "a@example.com", "password": "wrong"})
     assert res.status_code == 401
@@ -94,9 +86,9 @@ def test_login_wrong_password():
 
 
 def test_login_unknown_email():
-    mock_db, col = _mock_db()
-    col.find_one = MagicMock(return_value=None)
-    c = _make_client(mock_db)
+    service = _mock_auth_service()
+    service.login.side_effect = InvalidCredentialsError()
+    c = _make_client(service)
 
     res = c.post("/auth/login", json={"email": "ghost@example.com", "password": "any"})
     assert res.status_code == 401

@@ -4,19 +4,27 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.container import Container
 from app.routers.chat import router as chat_router
 from app.routers.auth import router as auth_router
+from app.routers.workspaces import router as workspaces_router
 
 container = Container()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    container.init_resources()
+    await container.init_resources()
     yield
-    container.shutdown_resources()
+    await container.shutdown_resources()
 
 
 def create_app() -> FastAPI:
-    container.wire(modules=["app.routers.chat", "app.routers.auth"])
+    container.wire(
+        modules=[
+            "app.routers.chat",
+            "app.routers.auth",
+            "app.routers.workspaces",
+            "app.core.deps",
+        ]
+    )
 
     app = FastAPI(title="Weft QA API", lifespan=lifespan)
     app.add_middleware(
@@ -28,6 +36,7 @@ def create_app() -> FastAPI:
     app.container = container
     app.include_router(auth_router)
     app.include_router(chat_router)
+    app.include_router(workspaces_router)
     return app
 
 

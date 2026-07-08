@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "beanie>=1.29.0",
     "dependency-injector>=4.49.1",
     "fastapi>=0.138.0",
     "langchain-openrouter>=0.2.4",
