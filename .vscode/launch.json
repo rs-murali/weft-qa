@@ -19,7 +19,7 @@
             "args": [
                 "main:app",
                 "--reload",
-                "--port", "9000"
+                "--port", "9100"
             ],
             "jinja": true,
             "cwd": "${workspaceFolder}/api",

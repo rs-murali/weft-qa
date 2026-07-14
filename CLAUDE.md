@@ -106,3 +106,6 @@ UI components in `web/components/ui/` are Radix UI primitives; `web/lib/utils.ts
 
 **Frontend UI:**
 - Use shadcn/ui components exclusively for all UI elements. Do not introduce other component libraries.
+
+**Documentation lookups:**
+- Use the context7 MCP tools to fetch official, up-to-date documentation for any library/framework/SDK (e.g. assistant-ui, Next.js, Radix, Tailwind) instead of relying on training data.

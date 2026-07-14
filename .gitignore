@@ -215,6 +215,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+.playwright/
+.playwright-shots/
 
 # The Python "lib/" rule above is for packaging output; it must not swallow the
 # frontend's source directory.
