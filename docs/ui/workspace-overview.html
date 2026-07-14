@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>weft — Checkout flow revamp</title>
+<script>
+  (function () {
+    var t = localStorage.getItem("weft-theme") || "dark";
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/workspace-overview.css" />
+</head>
+<body>
+
+<h1 class="visually-hidden">weft workspace overview for Checkout flow revamp — the landing screen after opening a workspace, with stats, a composer to start a new chat, recent chat threads, a requirements coverage summary, needs attention, and uploaded files</h1>
+
+<div class="page">
+
+  <div class="topbar">
+    <button class="breadcrumb" onclick="location.href='home.html'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Workspaces</span>
+      <span class="sep">/</span>
+      <span class="current">Checkout flow revamp</span>
+    </button>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-secondary" onclick="sendToast('Export requirements + test suite as markdown')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        <span>Export</span>
+      </button>
+      <button class="theme-toggle" aria-label="Toggle color theme" onclick="toggleTheme()">
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="workspace-header">
+    <h1>Checkout flow revamp</h1>
+    <p>Requirements, test coverage, and PRD changes for the checkout redesign</p>
+  </div>
+
+  <div class="stat-line">
+    <span><strong class="warning">78%</strong> coverage</span>
+    <span class="stat-sep">·</span>
+    <span><strong>12</strong> requirements</span>
+    <span class="stat-sep">·</span>
+    <span><strong class="warning">2</strong> need review</span>
+    <span class="stat-sep">·</span>
+    <span><strong class="danger">1</strong> orphaned</span>
+  </div>
+
+  <div class="workspace-layout">
+
+    <div>
+      <div class="composer">
+        <input type="text" placeholder="Describe a requirement or ask a question..." />
+        <button aria-label="Send" onclick="location.href='workspace.html'">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+        </button>
+      </div>
+
+      <p class="section-label">Recent chats</p>
+      <div class="chat-list">
+        <a class="chat-row" href="workspace.html">
+          <span>Login requirement + clarifying questions</span>
+          <span class="when">2h ago</span>
+        </a>
+        <a class="chat-row" href="workspace.html">
+          <span>Payment validation edge cases</span>
+          <span class="when">Yesterday</span>
+        </a>
+        <a class="chat-row" href="workspace.html">
+          <span>Cart abandonment coverage gaps</span>
+          <span class="when">3 days ago</span>
+        </a>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header-row">
+          <p class="panel-title" style="margin-bottom:0;">Requirements <span class="count-badge">12</span></p>
+          <span class="weave-legend" style="font-size:12.5px;">
+            <span><i class="weave-dot" style="width:8px;height:8px;border-radius:2px;background:var(--success);display:inline-block;"></i>covered</span>
+            <span><i class="weave-dot" style="width:8px;height:8px;border-radius:2px;background:var(--warning);display:inline-block;"></i>flagged</span>
+            <span><i class="weave-dot" style="width:8px;height:8px;border-radius:2px;border:1px dashed var(--border-hover);display:inline-block;"></i>missing</span>
+          </span>
+        </div>
+        <div style="margin-top:10px;">
+          <div class="req-row">
+            <span class="req-key">REQ-001</span>
+            <span class="req-name">Email/password login</span>
+            <span class="weave"><i class="covered"></i><i class="covered"></i><i class="review"></i></span>
+          </div>
+          <div class="req-row">
+            <span class="req-key">REQ-002</span>
+            <span class="req-name">Account lockout after 5 attempts</span>
+            <span class="weave"><i class="covered"></i><i class="covered"></i><i class="covered"></i></span>
+          </div>
+          <div class="req-row">
+            <span class="req-key">REQ-004</span>
+            <span class="req-name">OTP resend after 60s</span>
+            <span class="weave"><i class="missing"></i></span>
+          </div>
+        </div>
+
+        <p class="section-label" style="margin-top:18px;">Needs attention</p>
+        <div class="attention-list">
+          <button class="attention-item" onclick="location.href='workspace.html#coverage'">
+            <svg class="attention-icon warning" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <span>2 test cases need review — REQ-001 changed to support OTP</span>
+          </button>
+          <button class="attention-item" onclick="location.href='workspace.html#coverage'">
+            <svg class="attention-icon danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="9" y1="15" x2="15" y2="9"/></svg>
+            <span>1 test case orphaned — REQ-008 removed</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rail-col">
+      <div class="panel">
+        <div class="panel-header-row">
+          <p class="panel-title" style="margin-bottom:0;">Files <span class="count-badge">2</span></p>
+          <button class="icon-btn" aria-label="Upload file" onclick="sendToast('Upload a file to this workspace')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+          </button>
+        </div>
+        <div style="margin-top:8px;">
+          <div class="file-row">
+            <span class="file-name"><span class="origin-tag">doc</span>checkout-spec.pdf</span>
+            <span class="file-meta">Jul 10</span>
+          </div>
+          <div class="file-row">
+            <span class="file-name"><span class="origin-tag">doc</span>checkout-spec-v2.pdf</span>
+            <span class="file-meta">Jul 12</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <p class="panel-title">Version history</p>
+        <p style="font-size:14px;color:var(--text-secondary);margin:0;">3 versions · last approved Jul 12</p>
+        <button class="btn-secondary" style="margin-top:10px;width:100%;justify-content:center;" onclick="location.href='workspace.html#history'">View history</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+  function sendToast(text) {
+    var toast = document.getElementById("toast");
+    toast.textContent = "→ " + text;
+    toast.classList.add("show");
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(function () {
+      toast.classList.remove("show");
+    }, 2000);
+  }
+  function toggleTheme() {
+    var cur = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", cur);
+    localStorage.setItem("weft-theme", cur);
+  }
+</script>
+</body>
+</html>

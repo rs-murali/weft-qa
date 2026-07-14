@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>weft — Checkout flow revamp — chat</title>
+<script>
+  (function () {
+    var t = localStorage.getItem("weft-theme") || "dark";
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/workspace.css" />
+</head>
+<body>
+
+<h1 class="visually-hidden">weft workspace chat screen for Checkout flow revamp: chat on the left, an artifact panel on the right switched by a rail with Requirements, Test Cases, Coverage, Files and History, showing draft requirements awaiting Gate 1 approval, draft test cases awaiting Gate 2 approval, the computed coverage matrix with flagged test cases, uploaded files, and version history</h1>
+
+<div class="shell">
+
+  <div class="topbar">
+    <button class="breadcrumb" onclick="location.href='workspace-overview.html'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Checkout flow revamp</span>
+      <span class="sep">/</span>
+      <span class="current">Login requirement + clarifying questions</span>
+    </button>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-secondary" onclick="openExport()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        <span>Export</span>
+      </button>
+      <button class="theme-toggle" aria-label="Toggle color theme" onclick="toggleTheme()">
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="workspace-body">
+
+    <nav class="rail">
+      <button class="rail-item" data-panel="requirements" onclick="showPanel('requirements')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Requirements
+        </span>
+        <span class="rail-badge">3</span>
+      </button>
+      <button class="rail-item" data-panel="testcases" onclick="showPanel('testcases')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M9 15l6-6M13 3h6v6M12 15l7-7"/></svg>
+          Test Cases
+        </span>
+        <span class="rail-badge">6</span>
+      </button>
+      <button class="rail-item" data-panel="coverage" onclick="showPanel('coverage')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16M12 4v16M20 4v16"/><path d="M1 9h22M1 15h22"/></svg>
+          Coverage
+        </span>
+      </button>
+      <button class="rail-item" data-panel="files" onclick="showPanel('files')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          Files
+        </span>
+        <span class="count-badge" style="font-size:12.5px;">2</span>
+      </button>
+      <button class="rail-item" data-panel="history" onclick="showPanel('history')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13a9 9 0 1 0 2.13-6.36L3 8"/><path d="M12 7v5l4 2"/></svg>
+          History
+        </span>
+      </button>
+    </nav>
+
+    <section class="chat-pane">
+      <div class="chat-scroll">
+        <div class="bubble system-note">checkout-spec.pdf attached</div>
+        <div class="bubble assistant">Extracted 3 requirements from checkout-spec.pdf. REQ-002 needs one clarifying answer before it's ready to approve.</div>
+        <div class="bubble assistant">REQ-002 — how long should the account stay locked after 5 failed attempts?</div>
+        <div class="bubble user">15 minutes</div>
+        <div class="bubble assistant">
+          Updated AC1 on REQ-002.
+          <button class="review-link" onclick="showPanel('requirements')">
+            Review the draft
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+        <div class="bubble user">Email login should support OTP instead of password</div>
+        <div class="change-card">
+          <div class="title">Proposed: modifies REQ-001</div>
+          <div>3 linked test cases will move to <code>needs_review</code></div>
+          <div class="actions">
+            <button class="chip" onclick="sendToast(&quot;Marked as a new requirement instead&quot;)">It's new instead</button>
+            <button class="chip primary" onclick="approveChange()">Approve</button>
+          </div>
+        </div>
+        <div class="bubble system-note" id="version-note" style="display:none;">Version 3 created — REQ-001's test cases are now needs_review</div>
+      </div>
+      <div class="composer-bar">
+        <div class="composer">
+          <button class="icon-btn" aria-label="Attach a file" onclick="sendToast('Attach a document')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          </button>
+          <input type="text" placeholder="Send a message..." />
+          <button class="send-btn" aria-label="Send" onclick="sendToast('Message sent')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="artifact-pane">
+
+      <!-- Requirements — Gate 1 draft -->
+      <div class="artifact-panel active" data-panel="requirements">
+        <div class="artifact-head">
+          <div class="artifact-head-row">
+            <h2>Requirements — draft</h2>
+          </div>
+          <p class="sub">Gate 1 · 3 extracted from checkout-spec.pdf · review each, then approve together</p>
+        </div>
+        <div class="artifact-scroll">
+          <div class="draft-row" id="row-req-001">
+            <div class="draft-body">
+              <div><span class="draft-key">REQ-001</span><span class="draft-title">User can log in with email + password</span></div>
+              <div class="draft-meta">AC1 valid credentials · AC2 invalid shows error · AC3 5 failed attempts locks account</div>
+            </div>
+            <div class="draft-actions">
+              <button class="chip" onclick="sendToast('Editing REQ-001')">Edit</button>
+              <button class="chip danger-hover" onclick="rejectRow('row-req-001')">Reject</button>
+              <button class="chip primary" onclick="sendToast('REQ-001 approved')">✓</button>
+            </div>
+          </div>
+          <div class="draft-row" id="row-req-002">
+            <div class="draft-body">
+              <div><span class="draft-key">REQ-002</span><span class="draft-title">Account locks after 5 failed login attempts</span></div>
+              <div class="draft-meta">AC1 locks for 15 minutes <em>(updated from chat)</em> · AC2 shows countdown</div>
+            </div>
+            <div class="draft-actions">
+              <button class="chip" onclick="sendToast('Editing REQ-002')">Edit</button>
+              <button class="chip danger-hover" onclick="rejectRow('row-req-002')">Reject</button>
+              <button class="chip primary" onclick="sendToast('REQ-002 approved')">✓</button>
+            </div>
+          </div>
+          <div class="draft-row rejected" id="row-req-003">
+            <div class="draft-body">
+              <div><span class="draft-key">REQ-003</span><span class="draft-title">Guest checkout skips account creation</span></div>
+              <div class="draft-meta">rejected — out of scope for this cycle</div>
+            </div>
+            <div class="draft-actions">
+              <button class="chip" onclick="unrejectRow('row-req-003')">Undo</button>
+            </div>
+          </div>
+        </div>
+        <div class="approve-bar">
+          <span class="summary">2 approved, 1 rejected</span>
+          <button class="chip primary" onclick="sendToast('Version 1 created — 2 requirements are now canonical')">Approve all →</button>
+        </div>
+      </div>
+
+      <!-- Test Cases — Gate 2 draft -->
+      <div class="artifact-panel" data-panel="testcases">
+        <div class="artifact-head">
+          <h2>Test cases — draft</h2>
+          <p class="sub">Gate 2 · Gherkin scenarios linked to each acceptance criterion</p>
+        </div>
+        <div class="artifact-scroll">
+          <div class="tc-group">
+            <p class="tc-group-title">REQ-001 · Email/password login</p>
+            <div class="draft-row">
+              <div class="draft-body">
+                <div><span class="draft-key">TC-001</span><span class="draft-title">Valid credentials log the user in</span></div>
+                <div class="gherkin">Given a registered user
+When they submit valid email and password
+Then they land on the account dashboard</div>
+              </div>
+              <div class="draft-actions">
+                <button class="chip" onclick="sendToast('Editing TC-001')">Edit</button>
+                <button class="chip danger-hover" onclick="sendToast('TC-001 rejected')">Reject</button>
+                <button class="chip primary" onclick="sendToast('TC-001 approved')">✓</button>
+              </div>
+            </div>
+          </div>
+          <div class="tc-group">
+            <p class="tc-group-title">REQ-002 · Account lockout</p>
+            <div class="draft-row">
+              <div class="draft-body">
+                <div><span class="draft-key">TC-004</span><span class="draft-title">5th failed attempt locks the account for 15 minutes</span></div>
+                <div class="gherkin">Given 4 prior failed login attempts
+When the 5th attempt also fails
+Then the account locks and a 15-minute countdown is shown</div>
+              </div>
+              <div class="draft-actions">
+                <button class="chip" onclick="sendToast('Editing TC-004')">Edit</button>
+                <button class="chip danger-hover" onclick="sendToast('TC-004 rejected')">Reject</button>
+                <button class="chip primary" onclick="sendToast('TC-004 approved')">✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="approve-bar">
+          <span class="summary">5 approved, 1 pending</span>
+          <button class="chip primary" onclick="sendToast('Test cases approved and linked')">Approve all →</button>
+        </div>
+      </div>
+
+      <!-- Coverage matrix -->
+      <div class="artifact-panel" data-panel="coverage">
+        <div class="artifact-head">
+          <h2>Coverage matrix</h2>
+          <p class="sub">Computed at read time from requirement ↔ test-case links — never stored</p>
+        </div>
+        <div class="artifact-scroll">
+          <table class="matrix-table">
+            <tr><th>Requirement</th><th>Threads</th><th>Status</th></tr>
+            <tr>
+              <td>REQ-001<div class="req-name">Email/password login</div></td>
+              <td>
+                <span class="weave">
+                  <i class="covered" title="AC1 — covered"></i>
+                  <i class="covered" title="AC2 — covered"></i>
+                  <span class="thread-btn" role="button" tabindex="0" onclick="togglePop('pop-req1')" aria-label="AC3 needs review — open actions">
+                    <i class="review"></i>
+                    <div class="popover" id="pop-req1">
+                      <div class="popover-label">AC3 · needs_review</div>
+                      <button onclick="sendToast('Regenerating test case for AC3')">Regenerate</button>
+                      <button onclick="sendToast('Editing test case for AC3')">Edit</button>
+                      <button onclick="sendToast('Confirmed still valid')">Confirm still valid</button>
+                    </div>
+                  </span>
+                </span>
+              </td>
+              <td><span class="pill warning">Partial</span></td>
+            </tr>
+            <tr>
+              <td>REQ-002<div class="req-name">Account lockout</div></td>
+              <td><span class="weave"><i class="covered"></i><i class="covered"></i></span></td>
+              <td><span class="pill success">Covered</span></td>
+            </tr>
+            <tr>
+              <td>REQ-004<div class="req-name">OTP resend after 60s</div></td>
+              <td>
+                <button class="chip" onclick="sendToast('Generating test cases for REQ-004')" style="font-size:13px;">
+                  <span class="weave"><i class="missing"></i></span> generate
+                </button>
+              </td>
+              <td><span class="pill danger">Missing</span></td>
+            </tr>
+            <tr>
+              <td>REQ-008 <span style="color:var(--text-tertiary);font-family:var(--font-mono);font-size:12.5px;">tombstoned</span><div class="req-name">Google login (removed)</div></td>
+              <td>
+                <span class="thread-btn" role="button" tabindex="0" onclick="togglePop('pop-req8')" aria-label="Orphaned test case — open actions">
+                  <span class="weave"><i class="orphaned"></i></span>
+                  <div class="popover" id="pop-req8">
+                    <div class="popover-label">TC-011 · orphaned</div>
+                    <button onclick="sendToast('Pick a new requirement to re-link TC-011')">Re-link</button>
+                    <button onclick="sendToast('TC-011 archived')">Archive</button>
+                    <button onclick="sendToast('TC-011 deleted')">Delete</button>
+                  </div>
+                </span>
+              </td>
+              <td><span class="pill danger">Removed</span></td>
+            </tr>
+          </table>
+
+          <div class="weave-legend" style="margin-top:18px;">
+            <span><i class="weave"><i class="covered"></i></i> covered</span>
+            <span><i class="weave"><i class="review"></i></i> needs_review</span>
+            <span><i class="weave"><i class="orphaned"></i></i> orphaned</span>
+            <span><i class="weave"><i class="missing"></i></i> missing / unmapped</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Files -->
+      <div class="artifact-panel" data-panel="files">
+        <div class="artifact-head">
+          <div class="artifact-head-row">
+            <h2>Files</h2>
+            <button class="btn-secondary" onclick="sendToast('Upload a file to this workspace')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+              <span>Upload</span>
+            </button>
+          </div>
+          <p class="sub">Uploaded documents, kept for provenance — not a version of the truth</p>
+        </div>
+        <div class="artifact-scroll">
+          <div class="file-list-row">
+            <span><span class="origin-tag">doc</span>checkout-spec.pdf</span>
+            <span class="meta">uploaded Jul 10</span>
+          </div>
+          <div class="file-list-row">
+            <span><span class="origin-tag">doc</span>checkout-spec-v2.pdf</span>
+            <span class="meta">uploaded Jul 12</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="artifact-panel" data-panel="history">
+        <div class="artifact-head">
+          <h2>Version history</h2>
+          <p class="sub">Every Gate-1 approval creates a snapshot — this is the audit trail</p>
+        </div>
+        <div class="artifact-scroll">
+          <div class="timeline">
+            <div class="timeline-item" onclick="sendToast('Viewing snapshot — Version 3 (read-only)')">
+              <div class="t-head">Version 3 <span class="t-date">Jul 12 · document</span></div>
+              <div class="t-diff" style="color:var(--warning);">~1 modified · −1 removed</div>
+              <div class="t-explain">Email login now supports OTP instead of password (REQ-001 modified); Google login removed (REQ-008).</div>
+            </div>
+            <div class="timeline-item" onclick="sendToast('Viewing snapshot — Version 2 (read-only)')">
+              <div class="t-head">Version 2 <span class="t-date">Jul 11 · chat</span></div>
+              <div class="t-diff" style="color:var(--success);">+1 added</div>
+              <div class="t-explain">Added OTP resend requirement from chat.</div>
+            </div>
+            <div class="timeline-item" onclick="sendToast('Viewing snapshot — Version 1 (read-only)')">
+              <div class="t-head">Version 1 <span class="t-date">Jul 10 · document</span></div>
+              <div class="t-diff" style="color:var(--success);">+2 added</div>
+              <div class="t-explain">Initial extraction from checkout-spec.pdf.</div>
+            </div>
+            <div class="timeline-item rejected" onclick="sendToast('Rejected proposals are kept, never discarded')">
+              <div class="t-head">Rejected <span class="t-date">Jul 10</span></div>
+              <div class="t-explain">Guest checkout skips account creation — rejected, out of scope.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="exportModal">
+  <div class="modal">
+    <h3>Export deliverables</h3>
+    <p class="sub">Markdown, ready to hand to your AI coding tool</p>
+    <div class="modal-toggles">
+      <div class="modal-toggle selected" id="toggle-req" onclick="toggleModal('toggle-req')">Requirements doc</div>
+      <div class="modal-toggle selected" id="toggle-tc" onclick="toggleModal('toggle-tc')">Test suite</div>
+    </div>
+    <div class="modal-preview"># Checkout flow revamp — Requirements (v3)
+
+## REQ-001 — Email/password login with OTP
+- AC1: valid OTP code logs the user in
+- AC2: invalid OTP shows an error
+...</div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeExport()">Cancel</button>
+      <button class="chip primary" onclick="sendToast('Copied markdown to clipboard'); closeExport()">Copy markdown</button>
+      <button class="btn-primary" onclick="sendToast('Downloading weft-checkout-flow-v3.md'); closeExport()">Download</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+  function showPanel(name) {
+    document.querySelectorAll(".artifact-panel").forEach(function (el) {
+      el.classList.toggle("active", el.dataset.panel === name);
+    });
+    document.querySelectorAll(".rail-item").forEach(function (el) {
+      el.classList.toggle("active", el.dataset.panel === name);
+    });
+    history.replaceState(null, "", "#" + name);
+    closeAllPopovers();
+  }
+
+  function rejectRow(id) {
+    document.getElementById(id).classList.add("rejected");
+  }
+  function unrejectRow(id) {
+    document.getElementById(id).classList.remove("rejected");
+  }
+
+  function approveChange() {
+    document.getElementById("version-note").style.display = "block";
+    sendToast("Approved — REQ-001 modified, linked test cases now need review");
+  }
+
+  function togglePop(id) {
+    var target = document.getElementById(id);
+    var isOpen = target.classList.contains("open");
+    closeAllPopovers();
+    if (!isOpen) target.classList.add("open");
+  }
+  function closeAllPopovers() {
+    document.querySelectorAll(".popover").forEach(function (p) {
+      p.classList.remove("open");
+    });
+  }
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".thread-btn")) closeAllPopovers();
+  });
+  document.querySelectorAll(".thread-btn").forEach(function (btn) {
+    btn.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+
+  function openExport() {
+    document.getElementById("exportModal").classList.add("open");
+  }
+  function closeExport() {
+    document.getElementById("exportModal").classList.remove("open");
+  }
+  function toggleModal(id) {
+    document.getElementById(id).classList.toggle("selected");
+  }
+
+  function sendToast(text) {
+    var toast = document.getElementById("toast");
+    toast.textContent = "→ " + text;
+    toast.classList.add("show");
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(function () {
+      toast.classList.remove("show");
+    }, 2200);
+  }
+
+  function toggleTheme() {
+    var cur = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", cur);
+    localStorage.setItem("weft-theme", cur);
+  }
+
+  (function initFromHash() {
+    var name = location.hash.replace("#", "");
+    if (name) showPanel(name);
+  })();
+</script>
+</body>
+</html>

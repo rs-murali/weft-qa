@@ -1,0 +1,200 @@
+/* Weft — home dashboard. Uses shared tokens.css. */
+
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.page > .topbar {
+  padding: 20px 0 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.header p {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  margin: 6px 0 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.stat-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 13px 15px;
+}
+
+.stat-label {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin: 0 0 6px;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.stat-value.warning {
+  color: var(--warning);
+}
+.stat-value.danger {
+  color: var(--danger);
+}
+
+.attention-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.attention-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.attention-item:hover {
+  background: var(--bg-tile-hover);
+  color: var(--text-primary);
+}
+
+.attention-item strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.attention-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.attention-icon.warning {
+  color: var(--warning);
+}
+.attention-icon.danger {
+  color: var(--danger);
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-header h2 {
+  font-size: 17.5px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.section-header p {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.workspace-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 15px;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  min-height: 118px;
+}
+
+.workspace-card:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-tile-hover);
+}
+
+.workspace-card h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 5px;
+}
+
+.workspace-card p {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.workspace-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.workspace-meta .updated {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.workspace-meta .pct {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+.workspace-meta .pct.success {
+  color: var(--success);
+}
+.workspace-meta .pct.warning {
+  color: var(--warning);
+}
+.workspace-meta .pct.danger {
+  color: var(--danger);
+}
+
+.workspace-card.empty-state {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 118px;
+  border-style: dashed;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}

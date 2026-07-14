@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>weft — Refund policy update — new chat</title>
+<script>
+  (function () {
+    var t = localStorage.getItem("weft-theme") || "dark";
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/workspace.css" />
+</head>
+<body>
+
+<h1 class="visually-hidden">weft workspace chat screen right after the first message is sent in a new chat — the assistant is still extracting requirements, so the artifact panel has nothing to review yet</h1>
+
+<div class="shell">
+
+  <div class="topbar">
+    <button class="breadcrumb" onclick="location.href='workspace-overview-empty.html'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Refund policy update</span>
+      <span class="sep">/</span>
+      <span class="current">New chat</span>
+    </button>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-secondary" onclick="sendToast('Nothing to export yet')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        <span>Export</span>
+      </button>
+      <button class="theme-toggle" aria-label="Toggle color theme" onclick="toggleTheme()">
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="workspace-body">
+
+    <nav class="rail">
+      <button class="rail-item active" data-panel="requirements" onclick="showPanel('requirements')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Requirements
+        </span>
+      </button>
+      <button class="rail-item" data-panel="testcases" onclick="showPanel('testcases')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M9 15l6-6M13 3h6v6M12 15l7-7"/></svg>
+          Test Cases
+        </span>
+      </button>
+      <button class="rail-item" data-panel="coverage" onclick="showPanel('coverage')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16M12 4v16M20 4v16"/><path d="M1 9h22M1 15h22"/></svg>
+          Coverage
+        </span>
+      </button>
+      <button class="rail-item" data-panel="files" onclick="showPanel('files')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          Files
+        </span>
+      </button>
+      <button class="rail-item" data-panel="history" onclick="showPanel('history')">
+        <span class="rail-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13a9 9 0 1 0 2.13-6.36L3 8"/><path d="M12 7v5l4 2"/></svg>
+          History
+        </span>
+      </button>
+    </nav>
+
+    <section class="chat-pane">
+      <div class="chat-scroll">
+        <div class="bubble user">Refunds must be processed within 5 business days of approval</div>
+        <div class="thinking" aria-label="Extracting requirements">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+      </div>
+      <div class="composer-bar">
+        <div class="composer">
+          <button class="icon-btn" aria-label="Attach a file" onclick="sendToast('Attach a document')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          </button>
+          <input type="text" placeholder="Send a message..." />
+          <button class="send-btn" aria-label="Send" onclick="sendToast('Message sent')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="artifact-pane">
+
+      <div class="artifact-panel active" data-panel="requirements">
+        <div class="artifact-head">
+          <h2>Requirements — draft</h2>
+          <p class="sub">Gate 1 · nothing extracted yet</p>
+        </div>
+        <div class="artifact-empty">
+          <svg class="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <p>Waiting on the first draft — this fills in as soon as extraction finishes.</p>
+        </div>
+      </div>
+
+      <div class="artifact-panel" data-panel="testcases">
+        <div class="artifact-head">
+          <h2>Test cases — draft</h2>
+          <p class="sub">Gate 2 · nothing to generate yet</p>
+        </div>
+        <div class="artifact-empty">
+          <svg class="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M9 15l6-6M13 3h6v6M12 15l7-7"/></svg>
+          <p>Test cases appear here once requirements are approved at Gate 1.</p>
+        </div>
+      </div>
+
+      <div class="artifact-panel" data-panel="coverage">
+        <div class="artifact-head">
+          <h2>Coverage matrix</h2>
+          <p class="sub">Computed at read time — nothing to compute yet</p>
+        </div>
+        <div class="artifact-empty">
+          <svg class="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16M12 4v16M20 4v16"/><path d="M1 9h22M1 15h22"/></svg>
+          <p>No approved requirements yet — coverage has nothing to measure against.</p>
+        </div>
+      </div>
+
+      <div class="artifact-panel" data-panel="files">
+        <div class="artifact-head">
+          <h2>Files</h2>
+          <p class="sub">Uploaded documents, kept for provenance</p>
+        </div>
+        <div class="artifact-empty">
+          <svg class="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          <p>Nothing uploaded yet — attach a document from the composer.</p>
+        </div>
+      </div>
+
+      <div class="artifact-panel" data-panel="history">
+        <div class="artifact-head">
+          <h2>Version history</h2>
+          <p class="sub">Every Gate-1 approval creates a snapshot</p>
+        </div>
+        <div class="artifact-empty">
+          <svg class="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v5h5"/><path d="M3.05 13a9 9 0 1 0 2.13-6.36L3 8"/><path d="M12 7v5l4 2"/></svg>
+          <p>No versions yet — your first Gate 1 approval creates Version 1.</p>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+  function showPanel(name) {
+    document.querySelectorAll(".artifact-panel").forEach(function (el) {
+      el.classList.toggle("active", el.dataset.panel === name);
+    });
+    document.querySelectorAll(".rail-item").forEach(function (el) {
+      el.classList.toggle("active", el.dataset.panel === name);
+    });
+    history.replaceState(null, "", "#" + name);
+  }
+  function sendToast(text) {
+    var toast = document.getElementById("toast");
+    toast.textContent = "→ " + text;
+    toast.classList.add("show");
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(function () {
+      toast.classList.remove("show");
+    }, 2200);
+  }
+  function toggleTheme() {
+    var cur = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", cur);
+    localStorage.setItem("weft-theme", cur);
+  }
+  (function initFromHash() {
+    var name = location.hash.replace("#", "");
+    if (name) showPanel(name);
+  })();
+</script>
+</body>
+</html>

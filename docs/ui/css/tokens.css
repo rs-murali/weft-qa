@@ -1,0 +1,440 @@
+/* Weft — shared design tokens. Dark is the primary, considered palette;
+   light is a proper second palette (not an auto-inverted fallback).
+   Toggle sets data-theme on <html>; default is dark. */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-page: #0e0f1a;
+  --bg-surface: #16182a;
+  --bg-tile: #1e2036;
+  --bg-tile-hover: #242745;
+  --border: #2b2e48;
+  --border-hover: #454973;
+
+  --text-primary: #f2f3f9;
+  --text-secondary: #9ba0c0;
+  --text-tertiary: #6e7396;
+
+  --accent: #7c86ff;
+  --accent-hover: #929bff;
+  --accent-contrast: #0e0f1a;
+  --accent-soft: rgba(124, 134, 255, 0.14);
+
+  --success: #3ed9a0;
+  --success-bg: rgba(62, 217, 160, 0.12);
+  --warning: #f0b94d;
+  --warning-bg: rgba(240, 185, 77, 0.14);
+  --danger: #f2717a;
+  --danger-bg: rgba(242, 113, 122, 0.14);
+
+  --shadow-panel: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg-page: #f5f5fa;
+  --bg-surface: #ffffff;
+  --bg-tile: #ffffff;
+  --bg-tile-hover: #f2f2fa;
+  --border: #e3e3ee;
+  --border-hover: #c9cae0;
+
+  --text-primary: #181a2a;
+  --text-secondary: #5b5e78;
+  --text-tertiary: #8b8da6;
+
+  --accent: #5b63e0;
+  --accent-hover: #4850c9;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(91, 99, 224, 0.1);
+
+  --success: #1c9d6c;
+  --success-bg: #e4f6ee;
+  --warning: #9a6c14;
+  --warning-bg: #faf1d9;
+  --danger: #c23c49;
+  --danger-bg: #fbe8ea;
+
+  --shadow-panel: 0 1px 2px rgba(30, 30, 60, 0.06);
+}
+
+:root {
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 7px;
+
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Hanken Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+button,
+input {
+  font-family: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+.brand-name {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* sticky, consistent chrome across every screen */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg-page);
+}
+
+/* ---------- shared chrome ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-tile);
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.theme-toggle svg {
+  display: block;
+}
+
+.theme-toggle .icon-moon {
+  display: none;
+}
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  display: none;
+}
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+  display: block;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 14.5px;
+  color: var(--text-secondary);
+}
+
+.breadcrumb:hover {
+  color: var(--text-primary);
+}
+
+.breadcrumb .sep {
+  color: var(--text-tertiary);
+}
+
+.breadcrumb .current {
+  color: var(--text-primary);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-tile);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 13px;
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  border-color: var(--border-hover);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 4px 9px;
+  font-size: 13.5px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.chip.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+  font-family: var(--font-sans);
+  font-weight: 500;
+}
+
+.chip.primary:hover {
+  background: var(--accent-hover);
+}
+
+.chip.danger-hover:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-panel);
+}
+
+.panel-title {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.count-badge {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  background: var(--bg-tile);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1px 7px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.pill.success {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.pill.warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.pill.danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.search-input,
+.composer input {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 14.5px;
+  color: var(--text-primary);
+}
+
+.search-input::placeholder,
+.composer input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.search-input:focus,
+.composer input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ---------- signature: weave / thread coverage indicator ---------- */
+
+.weave {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  vertical-align: middle;
+}
+
+.weave i {
+  width: 12px;
+  height: 5px;
+  border-radius: 1px;
+  display: inline-block;
+}
+
+.weave i.covered {
+  background: var(--success);
+}
+
+.weave i.review {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--warning) 0px,
+    var(--warning) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  background-color: var(--warning-bg);
+}
+
+.weave i.orphaned {
+  background: var(--danger);
+  opacity: 0.55;
+}
+
+.weave i.missing {
+  background: transparent;
+  border: 1px dashed var(--border-hover);
+}
+
+.weave-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+.weave-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---------- toast ---------- */
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tile);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 14.5px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 200;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}

@@ -1,0 +1,292 @@
+/* Weft — workspace overview (the landing screen after clicking a workspace). */
+
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.intro-line {
+  font-size: 14.5px;
+  color: var(--text-tertiary);
+  margin: 0;
+  padding-bottom: 4px;
+}
+
+.empty-box {
+  border: 1px dashed var(--border-hover);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+
+.page > .topbar {
+  padding: 18px 0 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.workspace-header h1 {
+  font-size: 21px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.workspace-header p {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  margin: 5px 0 0;
+}
+
+.stat-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  padding-bottom: 4px;
+}
+
+.stat-line strong {
+  font-family: var(--font-mono);
+  font-size: 16.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.stat-line strong.warning {
+  color: var(--warning);
+}
+.stat-line strong.danger {
+  color: var(--danger);
+}
+
+.stat-sep {
+  color: var(--text-tertiary);
+}
+
+.workspace-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 16px;
+  align-items: start;
+}
+
+.composer {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 11px 13px;
+  margin-bottom: 16px;
+}
+
+.composer input {
+  border: none;
+  padding: 0;
+}
+
+.composer button {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.composer button:hover {
+  background: var(--accent-hover);
+}
+
+.section-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 10px;
+}
+
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.chat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  text-decoration: none;
+  color: inherit;
+  font-size: 14.5px;
+  cursor: pointer;
+}
+
+.chat-row:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-tile-hover);
+}
+
+.chat-row .when {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+
+.req-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  font-size: 14px;
+}
+
+.req-row .req-key {
+  font-family: var(--font-mono);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  width: 62px;
+}
+
+.req-row .req-name {
+  flex: 1;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rail-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.attention-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 6px;
+}
+
+.attention-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  width: 100%;
+}
+
+.attention-item:hover {
+  background: var(--bg-tile-hover);
+  color: var(--text-primary);
+}
+
+.attention-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.attention-icon.warning {
+  color: var(--warning);
+}
+.attention-icon.danger {
+  color: var(--danger);
+}
+
+.file-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.file-row:last-child {
+  border-bottom: none;
+}
+
+.file-row .file-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-row .file-meta {
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+
+.origin-tag {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-right: 6px;
+}
+
+.icon-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-tile);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.icon-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+}
+
+.panel-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 720px) {
+  .workspace-layout {
+    grid-template-columns: 1fr;
+  }
+}
