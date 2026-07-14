@@ -2,16 +2,27 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { ArrowUp, Plus } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
-import { Assistant } from "@/components/assistant";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { api, type Workspace } from "@/lib/api";
+import { getOverviewMockData } from "@/lib/placeholder-workspace-data";
+import { BreadcrumbNav } from "@/components/workspace/breadcrumb-nav";
+import { ExportDialog } from "@/components/workspace/export-dialog";
+import { StatLine } from "@/components/workspace/stat-line";
+import { RecentChatsList } from "@/components/workspace/recent-chats-list";
+import { NeedsAttentionList } from "@/components/workspace/needs-attention-list";
+import { WeaveThreads, WeaveLegend } from "@/components/workspace/weave-threads";
+import { cn } from "@/lib/utils";
 
-export default function WorkspaceDetailPage() {
+export default function WorkspaceOverviewPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [draft, setDraft] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -28,15 +39,19 @@ export default function WorkspaceDetailPage() {
     };
   }, [params.id]);
 
+  function startChat() {
+    router.push(`/workspaces/${params.id}/chat`);
+  }
+
   if (notFound) {
     return (
-      <main className="flex min-h-dvh flex-col bg-white">
+      <main className="flex min-h-dvh flex-col bg-background text-foreground">
         <AppHeader />
         <div className="flex flex-1 flex-col items-center justify-center gap-3 text-center">
-          <p className="text-lg font-semibold text-black">Workspace not found</p>
+          <p className="text-lg font-semibold">Workspace not found</p>
           <button
             onClick={() => router.push("/")}
-            className="text-sm text-gray-500 underline-offset-2 hover:underline"
+            className="text-sm text-muted-foreground underline-offset-2 hover:underline"
           >
             Back to dashboard
           </button>
@@ -47,9 +62,9 @@ export default function WorkspaceDetailPage() {
 
   if (!workspace) {
     return (
-      <main className="flex min-h-dvh flex-col bg-white">
+      <main className="flex min-h-dvh flex-col bg-background text-foreground">
         <AppHeader />
-        <div className="mx-auto w-full max-w-4xl flex-1 space-y-4 px-4 py-8">
+        <div className="mx-auto w-full max-w-3xl flex-1 space-y-4 px-4 py-8">
           <Skeleton className="h-8 w-64" />
           <Skeleton className="h-4 w-96" />
           <Skeleton className="h-64 w-full" />
@@ -58,29 +73,179 @@ export default function WorkspaceDetailPage() {
     );
   }
 
-  return (
-    <main className="flex h-dvh flex-col bg-white">
-      <AppHeader />
-      <div className="flex min-h-0 flex-1">
-        <div className="w-72 shrink-0 overflow-y-auto border-r border-gray-100 p-4">
-          <h1 className="text-base font-semibold text-black">{workspace.name}</h1>
-          <p className="mt-1 text-sm text-gray-500">{workspace.description}</p>
+  const mock = getOverviewMockData(workspace);
+  const isEmpty = mock.stat === null;
 
-          <div className="mt-6 space-y-3">
-            <div className="rounded-lg border border-dashed border-gray-200 p-3 text-xs text-gray-400">
-              No requirements yet — upload a spec or start a conversation.
-            </div>
-            <div className="rounded-lg border border-dashed border-gray-200 p-3 text-xs text-gray-400">
-              No coverage data yet.
-            </div>
-            <div className="rounded-lg border border-dashed border-gray-200 p-3 text-xs text-gray-400">
-              Nothing needs attention yet.
-            </div>
+  return (
+    <main className="flex min-h-dvh flex-col bg-background text-foreground">
+      <AppHeader
+        breadcrumb={<BreadcrumbNav backHref="/" backLabel="Workspaces" current={workspace.name} />}
+        actions={
+          <ExportDialog
+            requirementsMarkdown="No content to export yet."
+            testSuiteMarkdown="No content to export yet."
+            fileNamePrefix={workspace.name.toLowerCase().replace(/\s+/g, "-")}
+          />
+        }
+      />
+
+      <div className="mx-auto w-full max-w-3xl flex-1 space-y-6 px-4 py-6">
+        <div>
+          <h1 className="text-xl font-semibold">{workspace.name}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {workspace.description ||
+              "Add a description so teammates know what this workspace covers"}
+          </p>
+        </div>
+
+        {isEmpty ? (
+          <p className="text-sm text-muted-foreground">
+            No activity yet — describe a requirement or attach a document below to get started.
+          </p>
+        ) : (
+          <StatLine stat={mock.stat!} />
+        )}
+
+        {mock.needsAttention.length > 0 && (
+          <div className="rounded-lg border bg-card p-4">
+            <p className="mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              Needs attention
+            </p>
+            <NeedsAttentionList workspaceId={workspace.id} items={mock.needsAttention} />
+          </div>
+        )}
+
+        <div
+          className={cn(
+            "flex flex-col gap-2 rounded-3xl border bg-muted/30 p-2",
+            isEmpty && "border-primary",
+          )}
+        >
+          <Input
+            placeholder="Describe a requirement or ask a question..."
+            value={draft}
+            autoFocus={isEmpty}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && startChat()}
+            className="border-none bg-transparent px-2.5 text-base shadow-none focus-visible:ring-0 dark:bg-transparent"
+          />
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7 rounded-full"
+              aria-label="Attach a file"
+            >
+              <Plus className="size-4" />
+            </Button>
+            <Button
+              size="icon"
+              onClick={startChat}
+              aria-label="Send message"
+              className="size-7 rounded-full"
+            >
+              <ArrowUp className="size-4.5" />
+            </Button>
           </div>
         </div>
-        <div className="min-h-0 flex-1">
-          <Assistant />
+
+        <div>
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <p className="text-sm font-medium text-muted-foreground">
+              Requirements {mock.requirements.length > 0 && `(${mock.requirements.length})`}
+            </p>
+            {mock.requirements.length > 0 && <WeaveLegend className="text-[11px]" />}
+          </div>
+          {mock.requirements.length > 0 ? (
+            <div className="overflow-hidden rounded-lg border">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b bg-muted/30 text-xs text-muted-foreground">
+                    <th className="px-3 py-2 text-left font-medium">Key</th>
+                    <th className="px-3 py-2 text-left font-medium">Title</th>
+                    <th className="px-3 py-2 text-left font-medium">AC</th>
+                    <th className="px-3 py-2 text-right font-medium">Weave</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {mock.requirements.map((req) => (
+                    <tr key={req.key} className="hover:bg-accent/50">
+                      <td className="px-3 py-2 font-mono text-xs whitespace-nowrap text-muted-foreground">
+                        {req.key}
+                      </td>
+                      <td className="px-3 py-2 text-muted-foreground">{req.title}</td>
+                      <td className="px-3 py-2 text-xs whitespace-nowrap text-muted-foreground">
+                        {req.acSummary}
+                      </td>
+                      <td className="px-3 py-2 text-right">
+                        <WeaveThreads threads={req.threads} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="rounded-md border border-dashed p-4 text-center text-xs text-muted-foreground">
+              No requirements yet — describe a feature above or attach a spec to extract some.
+            </p>
+          )}
         </div>
+
+        <div>
+          <p className="mb-2 text-sm font-medium text-muted-foreground">Recent chats</p>
+          {mock.recentChats.length > 0 ? (
+            <RecentChatsList workspaceId={workspace.id} chats={mock.recentChats} />
+          ) : (
+            <p className="rounded-md border border-dashed p-4 text-center text-xs text-muted-foreground">
+              No chats yet — your first message above starts one.
+            </p>
+          )}
+        </div>
+
+        {/* Files and version history — left for a future pass */}
+        {/* <div className="space-y-4">
+            <Card>
+              <CardHeader className="flex-row items-center justify-between gap-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Files {mock.files.length > 0 && `(${mock.files.length})`}
+                </CardTitle>
+                <Button variant="ghost" size="icon-sm" aria-label="Upload file">
+                  <FileText className="h-3.5 w-3.5" />
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {mock.files.length > 0 ? (
+                  <FilesList files={mock.files} />
+                ) : (
+                  <p className="rounded-md border border-dashed p-4 text-center text-xs text-muted-foreground">
+                    Nothing uploaded yet.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Version history
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {mock.versionSummary ? (
+                  <VersionHistorySummaryCard
+                    workspaceId={workspace.id}
+                    count={mock.versionSummary.count}
+                    lastApprovedDate={mock.versionSummary.lastApprovedDate}
+                  />
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    No versions yet — your first Gate 1 approval creates Version 1.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div> */}
       </div>
     </main>
   );
