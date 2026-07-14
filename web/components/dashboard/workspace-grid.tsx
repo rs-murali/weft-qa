@@ -4,7 +4,7 @@ import type { Workspace } from "@/lib/api";
 export function WorkspaceGrid({ workspaces }: { workspaces: Workspace[] }) {
   if (workspaces.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-gray-200 p-8 text-center text-sm text-gray-400">
+      <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
         No workspaces yet. Create one to get started.
       </div>
     );

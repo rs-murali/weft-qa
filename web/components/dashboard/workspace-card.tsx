@@ -3,11 +3,22 @@ import { Badge } from "@/components/ui/badge";
 import type { Workspace } from "@/lib/api";
 
 function coverageBadge(pct: number | null): { label: string; className: string } {
-  if (pct === null) return { label: "No data yet", className: "bg-gray-100 text-gray-500" };
+  if (pct === null) return { label: "No data yet", className: "bg-muted text-muted-foreground" };
   const rounded = Math.round(pct);
-  if (rounded >= 70) return { label: `${rounded}% covered`, className: "bg-emerald-50 text-emerald-700" };
-  if (rounded >= 40) return { label: `${rounded}% covered`, className: "bg-amber-50 text-amber-700" };
-  return { label: `${rounded}% covered`, className: "bg-red-50 text-red-700" };
+  if (rounded >= 70)
+    return {
+      label: `${rounded}% covered`,
+      className: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+    };
+  if (rounded >= 40)
+    return {
+      label: `${rounded}% covered`,
+      className: "bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+    };
+  return {
+    label: `${rounded}% covered`,
+    className: "bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  };
 }
 
 function relativeTime(iso: string): string {
@@ -30,14 +41,16 @@ export function WorkspaceCard({ workspace }: { workspace: Workspace }) {
   return (
     <Link
       href={`/workspaces/${workspace.id}`}
-      className="flex flex-col gap-4 rounded-lg border border-gray-100 bg-white p-4 text-left transition-colors hover:border-gray-300"
+      className="flex flex-col gap-4 rounded-lg border bg-card p-4 text-left transition-colors hover:border-foreground/20"
     >
       <div>
-        <h3 className="text-sm font-semibold text-black">{workspace.name}</h3>
-        <p className="mt-1 line-clamp-2 text-xs text-gray-500">{workspace.description}</p>
+        <h3 className="text-sm font-semibold">{workspace.name}</h3>
+        <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{workspace.description}</p>
       </div>
       <div className="mt-auto flex items-baseline justify-between">
-        <span className="text-xs text-gray-400">Updated {relativeTime(workspace.updated_at)}</span>
+        <span className="text-xs text-muted-foreground/70">
+          Updated {relativeTime(workspace.updated_at)}
+        </span>
         <Badge variant="secondary" className={coverage.className}>
           {coverage.label}
         </Badge>

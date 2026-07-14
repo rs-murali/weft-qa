@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { getInitialThemeScript } from "@/lib/theme";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,10 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: getInitialThemeScript() }} />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>

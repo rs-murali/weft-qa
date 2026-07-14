@@ -35,21 +35,17 @@ export default function Home() {
   const loading = workspaces === null;
 
   return (
-    <main className="flex min-h-dvh flex-col bg-white">
+    <main className="flex min-h-dvh flex-col bg-background text-foreground">
       <AppHeader />
       <div className="mx-auto w-full max-w-4xl flex-1 space-y-7 px-4 py-8">
         <div>
-          <p className="text-xl font-semibold text-black">Welcome back</p>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="text-xl font-semibold">Welcome back</p>
+          <p className="mt-1 text-sm text-muted-foreground">
             Here&apos;s how test coverage looks across your workspaces
           </p>
         </div>
 
-        {loading ? (
-          <Skeleton className="h-24 w-full" />
-        ) : (
-          <StatCards summary={summary} />
-        )}
+        {loading ? <Skeleton className="h-24 w-full" /> : <StatCards summary={summary} />}
 
         {loading ? (
           <Skeleton className="h-28 w-full" />
@@ -59,8 +55,8 @@ export default function Home() {
 
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-black">Workspaces</h2>
-            <p className="text-sm text-gray-500">Pick a workspace or start a new one</p>
+            <h2 className="text-lg font-semibold">Workspaces</h2>
+            <p className="text-sm text-muted-foreground">Pick a workspace or start a new one</p>
           </div>
           <CreateWorkspaceDialog />
         </div>
