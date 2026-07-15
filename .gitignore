@@ -221,3 +221,6 @@ __marimo__/
 # The Python "lib/" rule above is for packaging output; it must not swallow the
 # frontend's source directory.
 !web/lib/
+
+# Latest LLM draft per node, written by app/utils/llm_output.py for inspection.
+api/output/

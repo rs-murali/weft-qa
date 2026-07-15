@@ -14,3 +14,7 @@ class Message(BaseModel):
 
 class ChatRequest(BaseModel):
     messages: list[Message]
+    workspace_id: str
+    # None starts a run; anything else answers the gate the graph is paused on.
+    approval_status: Literal["approved", "rejected"] | None = None
+    feedback: str | None = None  # the reject reason, from the approval UI
