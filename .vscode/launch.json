@@ -15,15 +15,14 @@
             "name": "Python Debugger: FastAPI",
             "type": "debugpy",
             "request": "launch",
-            "module": "uvicorn",
-            "args": [
-                "main:app",
-                "--reload",
-                "--port", "9100"
-            ],
-            "jinja": true,
+            "program": "${workspaceFolder}/api/main.py",
+            "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/api",
-            "python": "${workspaceFolder}/api/.venv/Scripts/python.exe"
+            "python": "${workspaceFolder}/api/.venv/Scripts/python.exe",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/api"
+            },
+            "justMyCode": false
         }
     ]
 }

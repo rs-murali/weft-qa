@@ -14,8 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### API (run from `api/`)
 
 ```bash
-# Start dev server (port 9000)
-uv run uvicorn main:app --port 9000 --reload
+# Start dev server (port 9100)
+uv run uvicorn main:app --port 9100 --reload
 
 # Run tests
 uv run pytest
@@ -39,7 +39,7 @@ npm run format:fix # oxfmt format only
 npm run build
 ```
 
-Set `NEXT_PUBLIC_API_URL=http://localhost:9000` in `web/.env.local` if the API is not on port 9000.
+Set `NEXT_PUBLIC_API_URL=http://localhost:9100` in `web/.env.local` if the API is not on port 9100.
 
 ## Architecture
 
@@ -48,7 +48,7 @@ Set `NEXT_PUBLIC_API_URL=http://localhost:9000` in `web/.env.local` if the API i
 ```
 Browser → assistant-ui (Thread component)
        → fastapiAdapter (web/lib/chat-adapter.ts)  [plain SSE fetch]
-       → POST /chat/stream  (FastAPI, port 9000)
+       → POST /chat/stream  (FastAPI, port 9100)
        → TestGenAgent.astream()  [LangGraph graph]
        → LLM (OpenRouter via langchain-openrouter)
        ← token stream (text/plain)
