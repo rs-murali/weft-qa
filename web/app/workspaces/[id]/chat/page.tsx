@@ -146,7 +146,7 @@ export default function WorkspaceChatPage() {
           )}
 
           <div className="min-h-0 min-w-0 flex-1">
-            <Assistant />
+            <Assistant workspaceId={params.id} />
           </div>
 
           <div
