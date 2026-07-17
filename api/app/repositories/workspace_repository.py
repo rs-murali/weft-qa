@@ -13,3 +13,10 @@ class WorkspaceRepository:
 
     async def get_by_id(self, workspace_id: PydanticObjectId) -> Workspace | None:
         return await Workspace.get(workspace_id)
+
+    async def save(self, workspace: Workspace) -> Workspace:
+        await workspace.save()
+        return workspace
+
+    async def delete(self, workspace: Workspace) -> None:
+        await workspace.delete()
