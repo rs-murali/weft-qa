@@ -15,6 +15,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (!res.ok) {
     throw new Error(`API error: ${res.status} ${res.statusText}`);
   }
+  if (res.status === 204) {
+    return undefined as T;
+  }
   return res.json();
 }
 
@@ -49,4 +52,7 @@ export const api = {
   getWorkspace: (id: string) => request<Workspace>(`/workspaces/${id}`),
   createWorkspace: (body: { name: string; description: string }) =>
     request<Workspace>("/workspaces", { method: "POST", body: JSON.stringify(body) }),
+  updateWorkspace: (id: string, body: { name: string; description: string }) =>
+    request<Workspace>(`/workspaces/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
+  deleteWorkspace: (id: string) => request<void>(`/workspaces/${id}`, { method: "DELETE" }),
 };
