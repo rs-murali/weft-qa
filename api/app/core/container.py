@@ -14,17 +14,20 @@ from app.agents.weft.utils.nodes import Nodes as WeftNodes
 from app.agents.weft.agent import WeftAgent
 from app.models.user import User
 from app.models.workspace import Workspace
+from app.models.thread import Thread
 from app.repositories.user_repository import UserRepository
 from app.repositories.workspace_repository import WorkspaceRepository
+from app.repositories.thread_repository import ThreadRepository
 from app.services.auth_service import AuthService
 from app.services.workspace_service import WorkspaceService
+from app.services.thread_service import ThreadService
 
 _AGENTS_DIR = Path(__file__).parent.parent / "agents"
 
 
 async def _init_mongo_client(uri: str, db_name: str):
     client = AsyncMongoClient(uri, tz_aware=True)
-    await init_beanie(database=client[db_name], document_models=[User, Workspace])
+    await init_beanie(database=client[db_name], document_models=[User, Workspace, Thread])
     yield client
     await client.close()
 
@@ -52,6 +55,11 @@ class Container(containers.DeclarativeContainer):
     workspace_repository = providers.Singleton(WorkspaceRepository)
     workspace_service = providers.Singleton(
         WorkspaceService, workspace_repository=workspace_repository
+    )
+
+    thread_repository = providers.Singleton(ThreadRepository)
+    thread_service = providers.Singleton(
+        ThreadService, thread_repository=thread_repository
     )
 
     test_gen_system_prompt = providers.Singleton(

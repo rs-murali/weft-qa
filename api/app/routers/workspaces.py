@@ -5,7 +5,9 @@ from app.core.container import Container
 from app.core.deps import get_current_user
 from app.models.user import CurrentUser
 from app.models.workspace import WorkspaceCreate, WorkspaceRead, WorkspaceUpdate
+from app.models.thread import ThreadRead
 from app.services.workspace_service import WorkspaceNotFoundError, WorkspaceService
+from app.services.thread_service import ThreadService
 
 router = APIRouter(prefix="/workspaces", tags=["workspaces"])
 
@@ -67,3 +69,18 @@ async def delete_workspace(
         await workspace_service.delete_workspace(current_user.id, workspace_id)
     except WorkspaceNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workspace not found")
+
+
+@router.get("/{workspace_id}/threads", response_model=list[ThreadRead])
+@inject
+async def list_threads(
+    workspace_id: str,
+    current_user: CurrentUser = Depends(get_current_user),
+    workspace_service: WorkspaceService = Depends(Provide[Container.workspace_service]),
+    thread_service: ThreadService = Depends(Provide[Container.thread_service]),
+):
+    try:
+        await workspace_service.get_workspace(current_user.id, workspace_id)
+    except WorkspaceNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Workspace not found")
+    return await thread_service.list_threads(workspace_id)
