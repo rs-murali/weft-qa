@@ -10,6 +10,7 @@ class AppConfig(BaseSettings):
     )
 
     openrouter_api_key: str = Field(..., env="OPENROUTER_API_KEY")
+    llm_model: str = Field(..., env="LLM_MODEL")
 
     mongodb_uri: str = Field("mongodb://localhost:27017", env="MONGODB_URI")
     mongodb_db_name: str = Field("weft_qa", env="MONGODB_DB_NAME")
