@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowUp, Plus } from "lucide-react";
+import { ArrowUp } from "lucide-react";
+import { ComposerPrimitive, useAuiState } from "@assistant-ui/react";
 import { AppHeader } from "@/components/app-header";
+import { WeftRuntimeProvider } from "@/components/assistant";
+import { ComposerAddAttachment, ComposerAttachments } from "@/components/attachment";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { api, type Workspace } from "@/lib/api";
+import { api, type Workspace, type ChatThread } from "@/lib/api";
 import { getOverviewMockData } from "@/lib/placeholder-workspace-data";
 import { BreadcrumbNav } from "@/components/workspace/breadcrumb-nav";
+import { ChatExperience } from "@/components/workspace/chat-experience";
 import { ExportDialog } from "@/components/workspace/export-dialog";
 import { StatLine } from "@/components/workspace/stat-line";
 import { RecentChatsList } from "@/components/workspace/recent-chats-list";
@@ -22,7 +25,6 @@ export default function WorkspaceOverviewPage() {
   const router = useRouter();
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [notFound, setNotFound] = useState(false);
-  const [draft, setDraft] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -38,10 +40,6 @@ export default function WorkspaceOverviewPage() {
       cancelled = true;
     };
   }, [params.id]);
-
-  function startChat() {
-    router.push(`/workspaces/${params.id}/chat`);
-  }
 
   if (notFound) {
     return (
@@ -73,8 +71,50 @@ export default function WorkspaceOverviewPage() {
     );
   }
 
+  return (
+    <WeftRuntimeProvider workspaceId={params.id}>
+      <OverviewOrChat workspace={workspace} />
+    </WeftRuntimeProvider>
+  );
+}
+
+/*The overview composer is the real chat composer: the first send morphs
+this page into the chat experience in place, so the message is never lost
+to a navigation. The URL is updated shallowly so refresh and sharing land
+on the chat route; the runtime lives in the provider above and survives
+the swap.*/
+function OverviewOrChat({ workspace }: { workspace: Workspace }) {
+  const chatStarted = useAuiState((s) => s.thread.messages.length > 0);
+
+  useEffect(() => {
+    if (chatStarted) {
+      window.history.pushState(null, "", `/workspaces/${workspace.id}/chat`);
+    }
+  }, [chatStarted, workspace.id]);
+
+  if (chatStarted) {
+    return <ChatExperience workspace={workspace} />;
+  }
+  return <OverviewContent workspace={workspace} />;
+}
+
+function OverviewContent({ workspace }: { workspace: Workspace }) {
   const mock = getOverviewMockData(workspace);
   const isEmpty = mock.stat === null;
+  const [threads, setThreads] = useState<ChatThread[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .listThreads(workspace.id)
+      .then((ts) => {
+        if (!cancelled) setThreads(ts);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [workspace.id]);
 
   return (
     <main className="flex min-h-dvh flex-col bg-background text-foreground">
@@ -115,39 +155,29 @@ export default function WorkspaceOverviewPage() {
           </div>
         )}
 
-        <div
+        <ComposerPrimitive.Root
           className={cn(
             "flex flex-col gap-2 rounded-3xl border bg-muted/30 p-2",
             isEmpty && "border-primary",
           )}
         >
-          <Input
+          <ComposerAttachments />
+          <ComposerPrimitive.Input
             placeholder="Describe a requirement or ask a question..."
-            value={draft}
             autoFocus={isEmpty}
-            onChange={(e) => setDraft(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && startChat()}
-            className="border-none bg-transparent px-2.5 text-base shadow-none focus-visible:ring-0 dark:bg-transparent"
+            rows={1}
+            aria-label="Message input"
+            className="max-h-40 min-h-9 w-full resize-none bg-transparent px-2.5 py-1 text-base outline-none placeholder:text-muted-foreground/80"
           />
           <div className="flex items-center justify-between">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-7 rounded-full"
-              aria-label="Attach a file"
-            >
-              <Plus className="size-4" />
-            </Button>
-            <Button
-              size="icon"
-              onClick={startChat}
-              aria-label="Send message"
-              className="size-7 rounded-full"
-            >
-              <ArrowUp className="size-4.5" />
-            </Button>
+            <ComposerAddAttachment />
+            <ComposerPrimitive.Send asChild>
+              <Button size="icon" aria-label="Send message" className="size-7 rounded-full">
+                <ArrowUp className="size-4.5" />
+              </Button>
+            </ComposerPrimitive.Send>
           </div>
-        </div>
+        </ComposerPrimitive.Root>
 
         <div>
           <div className="mb-2 flex items-center justify-between gap-2">
@@ -194,8 +224,8 @@ export default function WorkspaceOverviewPage() {
 
         <div>
           <p className="mb-2 text-sm font-medium text-muted-foreground">Recent chats</p>
-          {mock.recentChats.length > 0 ? (
-            <RecentChatsList workspaceId={workspace.id} chats={mock.recentChats} />
+          {threads.length > 0 ? (
+            <RecentChatsList workspaceId={workspace.id} chats={threads} />
           ) : (
             <p className="rounded-md border border-dashed p-4 text-center text-xs text-muted-foreground">
               No chats yet — your first message above starts one.

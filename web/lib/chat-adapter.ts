@@ -32,8 +32,11 @@ export type ApprovalArgs = {
 /** What the approval UI hands back via `addResult`. */
 export type ApprovalResult = { approved: boolean; feedback?: string };
 
+export type ThreadIdRef = { current: string | null };
+
 /** One NDJSON line off `/chat/stream` — mirrors `event_line()` on the backend. */
 type StreamEvent =
+  | { type: "thread_id"; thread_id: string }
   | { type: "requirements"; requirements: WeftRequirement[] }
   | { type: "test_cases"; test_cases: WeftTestCase[] }
   | { type: "interrupt"; stage: WeftStage }
@@ -51,13 +54,14 @@ function isPendingApprovalCall(
   );
 }
 
-export function createFastapiAdapter(workspaceId: string): ChatModelAdapter {
+export function createFastapiAdapter(
+  workspaceId: string,
+  threadIdRef: ThreadIdRef,
+): ChatModelAdapter {
   return {
     async *run({ messages, abortSignal, unstable_getMessage }) {
       const token =
-        typeof window !== "undefined"
-          ? localStorage.getItem("weft_access_token")
-          : null;
+        typeof window !== "undefined" ? localStorage.getItem("weft_access_token") : null;
 
       // A resolved approval tool-call is always the last content part of the
       // in-progress message — see `unstable_humanToolNames` in assistant.tsx.
@@ -66,9 +70,7 @@ export function createFastapiAdapter(workspaceId: string): ChatModelAdapter {
       // sense as an answer to a gate the graph is already paused on.
       const lastPart = unstable_getMessage().content.at(-1);
       const pendingApproval =
-        isPendingApprovalCall(lastPart) && lastPart.result !== undefined
-          ? lastPart.result
-          : null;
+        isPendingApprovalCall(lastPart) && lastPart.result !== undefined ? lastPart.result : null;
 
       const response = await fetch(`${API_URL}/chat/stream`, {
         method: "POST",
@@ -78,20 +80,16 @@ export function createFastapiAdapter(workspaceId: string): ChatModelAdapter {
         },
         body: JSON.stringify({
           workspace_id: workspaceId,
+          thread_id: threadIdRef.current,
           messages: messages.map((m) => ({
             role: m.role,
             content: m.content
-              .filter(
-                (c): c is typeof c & { type: "text"; text: string } =>
-                  c.type === "text",
-              )
+              .filter((c): c is typeof c & { type: "text"; text: string } => c.type === "text")
               .map((c) => ({ type: "text", text: c.text })),
           })),
           ...(pendingApproval
             ? {
-                approval_status: pendingApproval.approved
-                  ? "approved"
-                  : "rejected",
+                approval_status: pendingApproval.approved ? "approved" : "rejected",
                 feedback: pendingApproval.feedback,
               }
             : {}),
@@ -123,6 +121,9 @@ export function createFastapiAdapter(workspaceId: string): ChatModelAdapter {
 
           const event = JSON.parse(line) as StreamEvent;
           switch (event.type) {
+            case "thread_id":
+              threadIdRef.current = event.thread_id;
+              break;
             case "requirements":
               requirements = event.requirements;
               break;

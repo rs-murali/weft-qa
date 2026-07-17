@@ -47,6 +47,14 @@ export type NeedsAttentionItem = {
   severity: Severity;
 };
 
+export type ChatThread = {
+  thread_id: string;
+  workspace_id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export const api = {
   listWorkspaces: () => request<Workspace[]>("/workspaces"),
   getWorkspace: (id: string) => request<Workspace>(`/workspaces/${id}`),
@@ -55,4 +63,5 @@ export const api = {
   updateWorkspace: (id: string, body: { name: string; description: string }) =>
     request<Workspace>(`/workspaces/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
   deleteWorkspace: (id: string) => request<void>(`/workspaces/${id}`, { method: "DELETE" }),
+  listThreads: (workspaceId: string) => request<ChatThread[]>(`/workspaces/${workspaceId}/threads`),
 };
