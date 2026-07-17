@@ -34,6 +34,16 @@ export default function Home() {
   const summary = useMemo(() => deriveDashboardSummary(workspaces ?? []), [workspaces]);
   const loading = workspaces === null;
 
+  function handleEdit(updated: Workspace) {
+    setWorkspaces((prev) =>
+      prev ? prev.map((ws) => (ws.id === updated.id ? updated : ws)) : prev,
+    );
+  }
+
+  function handleDelete(id: string) {
+    setWorkspaces((prev) => (prev ? prev.filter((ws) => ws.id !== id) : prev));
+  }
+
   return (
     <main className="flex min-h-dvh flex-col bg-background text-foreground">
       <AppHeader />
@@ -74,7 +84,7 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <WorkspaceGrid workspaces={filtered} />
+          <WorkspaceGrid workspaces={filtered} onEdit={handleEdit} onDelete={handleDelete} />
         )}
       </div>
     </main>
